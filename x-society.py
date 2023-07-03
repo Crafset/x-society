@@ -6,11 +6,14 @@ import requests
 from bs4 import BeautifulSoup
 import socket
 import threading
-#import psutil
+import psutil
 import random
 import string
+import datetime
 import pywifi
 from pywifi import const
+from scapy.all import ARP, Ether, srp
+from yeelight import Bulb
 
 #-- SYSTEM
 os.system('clear')
@@ -75,19 +78,19 @@ while True :
         def localiser_ip(ip):
                 g = geocoder.ip(ip)     
                 if g.ok:
-                    texte11 = f"    -Country   : {g.country}\n"
+                    texte11 = f"    -Country   :       {g.country}\n"
                     for caractere in texte11:
                         print(caractere, end='', flush=True)
                         time.sleep(0.01)
-                    texte12 = f"    -City      : {g.city}\n"
+                    texte12 = f"    -City      :       {g.city}\n"
                     for caractere in texte12:
                         print(caractere, end='', flush=True)
                         time.sleep(0.01)
-                    texte13 = f"    -Latitude  : {g.lat}\n"
+                    texte13 = f"    -Latitude  :       {g.lat}\n"
                     for caractere in texte13:
                         print(caractere, end='', flush=True)
                         time.sleep(0.01)
-                    texte14 = f"    -Longitude : {g.lng}\n"
+                    texte14 = f"    -Longitude :       {g.lng}\n"
                     for caractere in texte14:
                         print(caractere, end='', flush=True)
                         time.sleep(0.01)
@@ -129,18 +132,6 @@ while True :
                     time.sleep(0.01)
         full_name = input("Name> ")
         search_name_on_web(full_name)
-     
-
-    #-- ALARM HELP    
-    elif choice == "alarm help":
-        texte9 = """    -disable\n"""
-        for caractere in texte9:
-            print(caractere, end='', flush=True)
-            time.sleep(0.01)
-
-    #-- ALARM DISABLE    
-    elif choice == "alarm disable":
-        print("You are not connected to any network\n") 
 
 
     #-- BLACKOUT HELP  
@@ -152,7 +143,32 @@ while True :
 
     #-- BLACKOUT START
     elif choice == "blackout start":
-        print("soon...")
+        g = geocoder.ip('me')
+        latitude, longitude = g.latlng
+        lieu = geocoder.osm([latitude, longitude], method='reverse')
+        ville = lieu.city or lieu.town or lieu.village or lieu.state
+        maintenant = datetime.datetime.now()
+        heure = maintenant.hour
+        minutes = maintenant.minute
+        ip_light = input("ip> 192.168.1.")
+        texte35 = f"""Target: 192.168.1.{ip_light}
+Database : {ville}
+The light was off
+TRYPASS: *******
+==================
+Station : House
+Time : {heure}H{minutes} 
+Exploit send
+Please wait...\n"""
+        for caractere in texte35:
+            print(caractere, end='', flush=True)
+            time.sleep(0.01)
+        bulb = Bulb(f"192.168.1.{ip_light}")
+        bulb.turn_off()
+        texte36 = "The light is off\n"
+        for caractere in texte36:
+            print(caractere, end='', flush=True)
+            time.sleep(0.01)
 
 
     #-- WIFI
@@ -171,33 +187,37 @@ while True :
             time.sleep(0.01)  
 
     #-- WIFI SHOW IP   
-    #elif choice == "wifi show ip":
-    #    def get_hostname(ip):
-    #        try:
-    #            hostname = socket.gethostbyaddr(ip)[0]
-    #            return hostname
-    #        except socket.herror:
-    #            return "NONE"
-    #    def scan_wifi_network():
-    #        active_ips = []
-    #        interfaces = psutil.net_if_addrs()
-    #        for interface_name, interface_addresses in interfaces.items():
-    #            for address in interface_addresses:
-    #                if address.family == socket.AF_INET and not address.address.startswith("127."):
-    #                    ip = address.address
-    #                    hostname = get_hostname(ip)
-    #                    active_ips.append((ip, hostname))
-    #        return active_ips
-    #    active_ips = scan_wifi_network()
-    #    texte24 = "> Active IP addresses : \n"
-    #    for caractere in texte24:
-    #        print(caractere, end='', flush=True)
-    #        time.sleep(0.01)
-    #    for ip, hostname in active_ips:
-    #        texte25 = f"    -{ip} {hostname}\n"
-    #        for caractere in texte25:
-    #            print(caractere, end='', flush=True)
-    #            time.sleep(0.01)
+    elif choice == "wifi show ip":
+        def get_device_name(ip):
+            try:
+                hostname = socket.gethostbyaddr(ip)[0]
+                return hostname
+            except socket.herror:
+                return "None"
+        def scan_reseau(ip):
+            arp_request = ARP(pdst=ip)
+            ether = Ether(dst="ff:ff:ff:ff:ff:ff")
+            packet = ether / arp_request
+            result = srp(packet, timeout=3, verbose=0)[0]
+            devices = []
+            for sent, received in result:
+                devices.append({'ip': received.psrc, 'name': get_device_name(received.psrc)})
+            return devices
+        def main():
+            ip_reseau = "192.168.1.0/24"
+            devices = scan_reseau(ip_reseau)
+            texte33 = "> Active ip :\n"
+            for caractere in texte33:
+                print(caractere, end='', flush=True)
+                time.sleep(0.01)
+            for device in devices:
+                texte34 = f"""    -{device['ip']}        {device['name']}\n"""
+                for caractere in texte34:
+                    print(caractere, end='', flush=True)
+                    time.sleep(0.01)
+        if __name__ == "__main__":
+            main()
+
 
     #-- WIFI SHOW NETWORK
     elif choice == "wifi show network":
@@ -242,7 +262,7 @@ while True :
             adapter.connect(tmp_profile)
             if adapter.status() == const.IFACE_CONNECTED:
                 connected = True
-                print_same_line("Connecté au réseau : " + ssid)
+                print_same_line(">Successfully connected : " + ssid)
             else:
                 password = ''.join(random.sample(characters, 22))
     
@@ -271,7 +291,6 @@ while True :
         for caractere in texte32:
             print(caractere, end='', flush=True)
             time.sleep(0.01)  
-        print()
         os.system('python3 x-society.py')    
 
 
