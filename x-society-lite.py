@@ -6,6 +6,7 @@ import requests
 from bs4 import BeautifulSoup
 import socket
 import threading
+import psutil
 import random
 import string
 import pywifi
@@ -271,7 +272,7 @@ while True :
             print(caractere, end='', flush=True)
             time.sleep(0.01)  
         print()
-        os.system('python main.py')    
+        os.system('python3 main.py')    
 
 
     #-- EXIT
