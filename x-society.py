@@ -272,7 +272,7 @@ while True :
             print(caractere, end='', flush=True)
             time.sleep(0.01)  
         print()
-        os.system('python3 main.py')    
+        os.system('python3 x-society.py')    
 
 
     #-- EXIT
