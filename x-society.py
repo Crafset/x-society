@@ -6,7 +6,6 @@ import requests
 from bs4 import BeautifulSoup
 import socket
 import threading
-import psutil
 import random
 import string
 import datetime
