@@ -6,7 +6,6 @@ import requests
 from bs4 import BeautifulSoup
 import socket
 import threading
-import psutil
 import random
 import string
 import pywifi
@@ -171,33 +170,33 @@ while True :
             time.sleep(0.01)  
 
     #-- WIFI SHOW IP   
-    elif choice == "wifi show ip":
-        def get_hostname(ip):
-            try:
-                hostname = socket.gethostbyaddr(ip)[0]
-                return hostname
-            except socket.herror:
-                return "NONE"
-        def scan_wifi_network():
-            active_ips = []
-            interfaces = psutil.net_if_addrs()
-            for interface_name, interface_addresses in interfaces.items():
-                for address in interface_addresses:
-                    if address.family == socket.AF_INET and not address.address.startswith("127."):
-                        ip = address.address
-                        hostname = get_hostname(ip)
-                        active_ips.append((ip, hostname))
-            return active_ips
-        active_ips = scan_wifi_network()
-        texte24 = "> Active IP addresses : \n"
-        for caractere in texte24:
-            print(caractere, end='', flush=True)
-            time.sleep(0.01)
-        for ip, hostname in active_ips:
-            texte25 = f"    -{ip} {hostname}\n"
-            for caractere in texte25:
-                print(caractere, end='', flush=True)
-                time.sleep(0.01)
+    #elif choice == "wifi show ip":
+    #    def get_hostname(ip):
+    #        try:
+    #            hostname = socket.gethostbyaddr(ip)[0]
+    #            return hostname
+    #        except socket.herror:
+    #            return "NONE"
+    #    def scan_wifi_network():
+    #        active_ips = []
+    #        interfaces = psutil.net_if_addrs()
+    #        for interface_name, interface_addresses in interfaces.items():
+    #            for address in interface_addresses:
+    #                if address.family == socket.AF_INET and not address.address.startswith("127."):
+    #                    ip = address.address
+    #                    hostname = get_hostname(ip)
+    #                    active_ips.append((ip, hostname))
+    #        return active_ips
+    #    active_ips = scan_wifi_network()
+    #    texte24 = "> Active IP addresses : \n"
+    #    for caractere in texte24:
+    #        print(caractere, end='', flush=True)
+    #        time.sleep(0.01)
+    #    for ip, hostname in active_ips:
+    #        texte25 = f"    -{ip} {hostname}\n"
+    #        for caractere in texte25:
+    #            print(caractere, end='', flush=True)
+    #            time.sleep(0.01)
 
     #-- WIFI SHOW NETWORK
     elif choice == "wifi show network":
