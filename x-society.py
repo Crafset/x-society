@@ -39,15 +39,15 @@ while True :
     #-- HELP
     if choice == "help":
         texte5 = """    Type :
-    -help
-    -phone
-    -ip
-    -sherlock
-    -wifi
-    -blackout
-    -clear
-    -restart
-    -exit\n"""
+    -help                Get list of commands
+    -phone               Start to locate a phone
+    -ip                  Locate a IP
+    -sherlock            Get information of a person
+    -wifi                Hack any networks
+    -blackout            Cut off the lights
+    -clear               Clear the command history
+    -restart             Restarting the script
+    -exit                Exit from console\n"""
         for caractere in texte5:
             print(caractere, end='', flush=True)
             time.sleep(0.01)     
