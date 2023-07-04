@@ -13,7 +13,6 @@ import pywifi
 from pywifi import const
 from scapy.all import ARP, Ether, srp
 from yeelight import Bulb
-import nmap
 
 #-- SYSTEM
 os.system('clear')
