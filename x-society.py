@@ -9,7 +9,6 @@ import threading
 import random
 import string
 import datetime
-import pywifi
 import nmap
 from pywifi import const
 from scapy.all import ARP, Ether, srp
@@ -203,23 +202,23 @@ Please wait...\n"""
         scan_reseau(adresse_ip)
 
     #-- WIFI SHOW NETWORK
-    elif choice == "wifi show network":
-        texte30 = "> Active network :\n"
-        for caractere in texte30:
-                print(caractere, end='', flush=True)
-                time.sleep(0.01)
-        wifi = pywifi.PyWiFi()
-        iface = wifi.interfaces()[0]
-        if iface.status() in [const.IFACE_DISCONNECTED, const.IFACE_INACTIVE]:
-            iface.disconnect()
-            iface.activate()
-        iface.scan()
-        results = iface.scan_results()
-        for result in results:
-            texte31 = f"                 {result.ssid}\n"
-            for caractere in texte31:
-                print(caractere, end='', flush=True)
-                time.sleep(0.01)
+#    elif choice == "wifi show network":
+#        texte30 = "> Active network :\n"
+#        for caractere in texte30:
+#                print(caractere, end='', flush=True)
+#                time.sleep(0.01)
+#        wifi = pywifi.PyWiFi()
+#        iface = wifi.interfaces()[0]
+#        if iface.status() in [const.IFACE_DISCONNECTED, const.IFACE_INACTIVE]:
+#            iface.disconnect()
+#            iface.activate()
+#        iface.scan()
+#        results = iface.scan_results()
+#        for result in results:
+#            texte31 = f"                 {result.ssid}\n"
+#            for caractere in texte31:
+#                print(caractere, end='', flush=True)
+#                time.sleep(0.01)
 
 
     #-- WIFI BRUTEFORCE
