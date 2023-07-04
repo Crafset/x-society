@@ -220,7 +220,6 @@ Please wait...\n"""
         if __name__ == "__main__":
             main()
 
-
     #-- WIFI SHOW NETWORK
     elif choice == "wifi show network":
         texte30 = "> Active network :\n"
