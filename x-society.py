@@ -6,6 +6,7 @@ import requests
 from bs4 import BeautifulSoup
 import socket
 import threading
+import psutil
 import random
 import string
 import datetime
@@ -193,15 +194,17 @@ Please wait...\n"""
                 return hostname
             except socket.herror:
                 return "None"
+        
         def scan_reseau(ip):
             arp_request = ARP(pdst=ip)
             ether = Ether(dst="ff:ff:ff:ff:ff:ff")
             packet = ether / arp_request
-            result = srp(packet, timeout=3, verbose=0)[0]
+            result, _ = srp(packet, timeout=3, verbose=0)
             devices = []
             for sent, received in result:
                 devices.append({'ip': received.psrc, 'name': get_device_name(received.psrc)})
             return devices
+        
         def main():
             ip_reseau = "192.168.1.0/24"
             devices = scan_reseau(ip_reseau)
@@ -210,10 +213,11 @@ Please wait...\n"""
                 print(caractere, end='', flush=True)
                 time.sleep(0.01)
             for device in devices:
-                texte34 = f"""    -{device['ip']}        {device['name']}\n"""
+                texte34 = f"    -{device['ip']}        {device['name']}\n"
                 for caractere in texte34:
                     print(caractere, end='', flush=True)
                     time.sleep(0.01)
+        
         if __name__ == "__main__":
             main()
 
