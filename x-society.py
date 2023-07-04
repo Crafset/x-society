@@ -13,6 +13,7 @@ import pywifi
 from pywifi import const
 from scapy.all import ARP, Ether, srp
 from yeelight import Bulb
+import nmap
 
 #-- SYSTEM
 os.system('clear')
@@ -187,38 +188,19 @@ Please wait...\n"""
 
     #-- WIFI SHOW IP   
     elif choice == "wifi show ip":
-        def get_device_name(ip):
-            try:
-                hostname = socket.gethostbyaddr(ip)[0]
-                return hostname
-            except socket.herror:
-                return "None"
-        
-        def scan_reseau(ip):
-            arp_request = ARP(pdst=ip)
-            ether = Ether(dst="ff:ff:ff:ff:ff:ff")
-            packet = ether / arp_request
-            result, _ = srp(packet, timeout=3, verbose=0)
-            devices = []
-            for sent, received in result:
-                devices.append({'ip': received.psrc, 'name': get_device_name(received.psrc)})
-            return devices
-        
-        def main():
-            ip_reseau = "192.168.1.0/24"
-            devices = scan_reseau(ip_reseau)
-            texte33 = "> Active ip :\n"
-            for caractere in texte33:
-                print(caractere, end='', flush=True)
-                time.sleep(0.01)
-            for device in devices:
-                texte34 = f"    -{device['ip']}        {device['name']}\n"
-                for caractere in texte34:
+        def scan_reseau(adresse_ip):
+            scanner = nmap.PortScanner()
+            scanner.scan(adresse_ip, arguments='-sn --system-dns')
+
+            for hote in scanner.all_hosts():
+                nom_hote = scanner[hote].hostname() if 'hostname' in scanner[hote] else 'Inconnu'
+                texte37 = f"    -{hote}        {nom_hote}"
+                for caractere in texte37:
                     print(caractere, end='', flush=True)
-                    time.sleep(0.01)
-        
-        if __name__ == "__main__":
-            main()
+                    time.sleep(0.01)  
+
+        adresse_ip = '192.168.1.0/24'
+        scan_reseau(adresse_ip)
 
     #-- WIFI SHOW NETWORK
     elif choice == "wifi show network":
